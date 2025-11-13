@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirebaseConnect {
+class firebase_connect {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // --- 회원가입 ---
@@ -115,3 +115,4 @@ class FirebaseConnect {
     }
   }
 }
+
