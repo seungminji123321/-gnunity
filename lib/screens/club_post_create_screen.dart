@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gnunity/services/firebase_connect.dart'; 
 
 class CreateClubPostScreen extends StatefulWidget {
   final String clubId;
@@ -17,6 +18,9 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
   DateTimeRange? _selectedDateRange;
   bool _isLoading = false;
 
+  
+  final firebase_connect firebaseconnect = firebase_connect();
+
   Future<void> _presentDateRangePicker() async {
     final now = DateTime.now();
     final newDateRange = await showDateRangePicker(
@@ -32,6 +36,7 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     }
   }
 
+  //submitPost 함수
   Future<void> _submitPost() async {
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('제목은 필수입니다.')));
@@ -40,24 +45,30 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     setState(() { _isLoading = true; });
 
     try {
-      await FirebaseFirestore.instance
-          .collection('clubs')
-          .doc(widget.clubId)
-          .collection('posts')
-          .add({
+      
+      final postData = {
         'title': _titleController.text,
         'content': _contentController.text,
         'authorName': widget.currentUser['name'],
         'authorStudentId': widget.currentUser['studentId'],
         'createdAt': Timestamp.now(),
         'isAnnouncement': _isAnnouncement,
-        'startDate': _isAnnouncement && _selectedDateRange !=
+        'startDate': _isAnnouncement && _selectedDateRange != 
             null ? Timestamp.fromDate(_selectedDateRange!.start) : null,
-        'endDate': _isAnnouncement && _selectedDateRange !=
+        'endDate': _isAnnouncement && _selectedDateRange != 
             null ? Timestamp.fromDate(_selectedDateRange!.end) : null,
-      });
+      };
+
+      // FirebaseConnect 서비스를 통해 데이터 전송
+      await firebaseconnect.createClubPost(
+        clubId: widget.clubId,
+        postData: postData,
+      );
+
       if (mounted) Navigator.of(context).pop();
-    } finally {
+    } catch (e) {
+      print("게시물 생성 오류: $e");
+      // 오류 발생 시 로딩 중지
       if (mounted) setState(() { _isLoading = false; });
     }
   }
@@ -77,11 +88,11 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _titleController,
-                decoration: const InputDecoration(labelText: '제목')),
+            TextField(controller: _titleController, decoration: 
+            const InputDecoration(labelText: '제목')),
             const SizedBox(height: 16),
-            TextField(controller: _contentController,
-                decoration: const InputDecoration(labelText: '내용', alignLabelWithHint: true), maxLines: 8),
+            TextField(controller: _contentController, decoration: 
+            const InputDecoration(labelText: '내용', alignLabelWithHint: true), maxLines: 8),
             const SizedBox(height: 16),
 
             SwitchListTile(
@@ -102,8 +113,8 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
                 title: const Text('기간 설정 (선택)'),
                 subtitle: Text(_selectedDateRange == null
                     ? '설정 안 함'
-                    : '${_selectedDateRange!.start.month}/${_selectedDateRange!.start.day}'
-                    ' ~ ${_selectedDateRange!.end.month}/${_selectedDateRange!.end.day}'
+                    : '${_selectedDateRange!.start.month}/${_selectedDateRange!.start.day} '
+                    '~ ${_selectedDateRange!.end.month}/${_selectedDateRange!.end.day}'
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.calendar_month),
