@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gnunity/screens/home_screen.dart';
 import 'package:gnunity/screens/signup_screen.dart';
 import 'package:gnunity/services/firebase_connect.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart'; // 이 줄을 삭제합니다.
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -64,4 +64,5 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
 }
