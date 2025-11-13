@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class firebase_connect {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 // Firestore 데이터베이스 인스턴스에 접근
+  //회원가입
   Future<Map<String, dynamic>?> signUp({
     required String studentId,
     required String password,
@@ -95,4 +96,5 @@ class firebase_connect {
       print('게시물 삭제 중 오류: $e');
     }
   }
+
 }
