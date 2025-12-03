@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gnunity/screens/home_screen.dart';
 import 'package:gnunity/screens/signup_screen.dart';
 import 'package:gnunity/services/firebase_connect.dart';
+import 'package:gnunity/models/user_model.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -66,3 +67,4 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 }
+
