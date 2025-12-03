@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gnunity/models/club_model.dart';
+import 'package:gnunity/models/user_model.dart';
 import 'package:gnunity/services/firebase_connect.dart';
 import 'package:gnunity/widgets/custom_app_bar.dart';
 //동아리 상세정보, 가입 화면
@@ -99,4 +100,5 @@ class ClubDetailScreen extends StatelessWidget {
       ),
     );
   }
+
 }
