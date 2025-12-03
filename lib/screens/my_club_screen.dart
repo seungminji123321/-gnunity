@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gnunity/models/user_model.dart';
 import 'package:gnunity/screens/club_board_screen.dart';
 import 'package:gnunity/services/firebase_connect.dart';
 import 'package:gnunity/screens/Calendar_screen.dart';
@@ -120,4 +121,5 @@ class _MyClubScreenState extends State<MyClubScreen> {
       ),
     );
   }
+
 }
