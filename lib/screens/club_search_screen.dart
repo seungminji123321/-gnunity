@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gnunity/models/club_model.dart';
+import 'package:gnunity/models/user_model.dart';
 import 'package:gnunity/screens/club_detail_screen.dart';
 //동아리 검색
 class SearchScreen extends StatefulWidget {
@@ -90,4 +91,5 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
 }
