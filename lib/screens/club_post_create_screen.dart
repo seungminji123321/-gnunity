@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gnunity/services/firebase_connect.dart';
+import 'package:gnunity/models/post_model.dart';
 
 class CreateClubPostScreen extends StatefulWidget {
   final String clubId;
@@ -18,7 +19,7 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
   DateTimeRange? _selectedDateRange;
   bool _isLoading = false;
 
-  final firebase_connect firebaseconnect = firebase_connect();
+  final FirebaseConnect _firebaseConnect = FirebaseConnect();
 
   Future<void> _presentDateRangePicker() async {
     final now = DateTime.now();
@@ -43,35 +44,43 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     setState(() { _isLoading = true; });
 
     try {
-      final Map<String, dynamic> postData = {
-        'title': _titleController.text,
-        'content': _contentController.text,
-        'authorName': widget.currentUser['name'],
-        'authorStudentId': widget.currentUser['studentId'],
-        'createdAt': Timestamp.now(),
-        'isAnnouncement': _isAnnouncement,
-        // 삼항 연산자로 null 처리 로직도 여기서 수행
-        'startDate': _isAnnouncement && _selectedDateRange != null
-            ? Timestamp.fromDate(_selectedDateRange!.start)
-            : null,
-        'endDate': _isAnnouncement && _selectedDateRange != null
-            ? Timestamp.fromDate(_selectedDateRange!.end)
-            : null,
-      };
+      final newPost = Post(
+        id: '', // 생성 전이라 비워둠
+        title: _titleController.text,
+        content: _contentController.text,
+        authorName: widget.currentUser['name'],
+        authorStudentId: widget.currentUser['studentId'],
+        createdAt: DateTime.now(),
+        isAnnouncement: _isAnnouncement,
+        startDate: _isAnnouncement && _selectedDateRange != null ? _selectedDateRange!.start : null,
+        endDate: _isAnnouncement && _selectedDateRange != null ? _selectedDateRange!.end : null,
+      );
 
       
-      await firebaseconnect.createClubPost(
+      final Map<String, dynamic> postData = {
+        'title': newPost.title,
+        'content': newPost.content,
+        'authorName': newPost.authorName,
+        'authorStudentId': newPost.authorStudentId,
+        'createdAt': Timestamp.fromDate(newPost.createdAt),
+        'isAnnouncement': newPost.isAnnouncement,
+        'startDate': newPost.startDate != null ? Timestamp.fromDate(newPost.startDate!) : null,
+        'endDate': newPost.endDate != null ? Timestamp.fromDate(newPost.endDate!) : null,
+      };
+
+      // 3. 만들어진 Map을 서비스로 전달
+      await _firebaseConnect.createClubPost(
         clubId: widget.clubId,
         postData: postData,
       );
-
+      
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       print("게시물 생성 오류: $e");
       if (mounted) setState(() { _isLoading = false; });
     }
   }
-
+  
   @override
   void dispose() {
     _titleController.dispose();
@@ -91,7 +100,7 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
             const SizedBox(height: 16),
             TextField(controller: _contentController, decoration: const InputDecoration(labelText: '내용', alignLabelWithHint: true), maxLines: 8),
             const SizedBox(height: 16),
-
+            
             SwitchListTile(
               title: const Text('공지사항으로 등록'),
               value: _isAnnouncement,
@@ -108,9 +117,9 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
             if (_isAnnouncement)
               ListTile(
                 title: const Text('기간 설정 (선택)'),
-                subtitle: Text(_selectedDateRange == null
-                    ? '설정 안 함'
-                    : '${_selectedDateRange!.start.month}/${_selectedDateRange!.start.day} ~ ${_selectedDateRange!.end.month}/${_selectedDateRange!.end.day}'
+                subtitle: Text(_selectedDateRange == null 
+                  ? '설정 안 함' 
+                  : '${_selectedDateRange!.start.month}/${_selectedDateRange!.start.day} ~ ${_selectedDateRange!.end.month}/${_selectedDateRange!.end.day}'
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.calendar_month),
@@ -129,4 +138,3 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     );
   }
 }
-
