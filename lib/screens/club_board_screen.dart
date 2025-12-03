@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gnunity/screens/club_post_create_screen.dart';
+import 'package:gnunity/models/user_model.dart';
 import 'package:gnunity/screens/club_post_detail_screen.dart';
 import 'package:gnunity/services/firebase_connect.dart';
 
@@ -122,4 +123,5 @@ class ClubBoardScreen extends StatelessWidget {
       ),
     );
   }
+
 }
