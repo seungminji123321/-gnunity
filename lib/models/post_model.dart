@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
-  final String id;              // 게시물 고유 ID
-  final String title;           // 제목
-  final String content;         // 내용
-  final String authorName;      // 작성자 이름
-  final String authorStudentId; // 작성자 학번
-  final DateTime createdAt;     // 작성 시간
-  final bool isAnnouncement;    // 공지사항 여부
-  final DateTime? startDate;    // 시작일 (선택)
-  final DateTime? endDate;      // 종료일 (선택)
+  final String id;
+  final String title;
+  final String content;
+  final String authorName;
+  final String authorStudentId;
+  final DateTime createdAt;
+  final bool isAnnouncement;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   Post({
     required this.id,
@@ -22,4 +22,31 @@ class Post {
     this.startDate,
     this.endDate,
   });
+
+  factory Post.fromMap(Map<String, dynamic> data, String documentId) {
+    return Post(
+      id: documentId,
+      title: data['title'] ?? '',
+      content: data['content'] ?? '',
+      authorName: data['authorName'] ?? '알 수 없음',
+      authorStudentId: data['authorStudentId'] ?? '',
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      isAnnouncement: data['isAnnouncement'] ?? false,
+      startDate: data['startDate'] != null ? (data['startDate'] as Timestamp).toDate() : null,
+      endDate: data['endDate'] != null ? (data['endDate'] as Timestamp).toDate() : null,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'content': content,
+      'authorName': authorName,
+      'authorStudentId': authorStudentId,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'isAnnouncement': isAnnouncement,
+      'startDate': startDate != null ? Timestamp.fromDate(startDate!) : null,
+      'endDate': endDate != null ? Timestamp.fromDate(endDate!) : null,
+    };
+  }
 }
