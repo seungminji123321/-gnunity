@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gnunity/screens/board_screen.dart';
 import 'package:gnunity/screens/my_club_screen.dart';
+import 'package:gnunity/models/user_model.dart';
 import 'package:gnunity/screens/club_search_screen.dart';
 import 'package:gnunity/screens/settings_screen.dart';
 import 'package:gnunity/widgets/custom_app_bar.dart';
@@ -135,4 +136,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 }
