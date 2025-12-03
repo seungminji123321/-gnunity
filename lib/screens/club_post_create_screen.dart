@@ -43,7 +43,6 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     setState(() { _isLoading = true; });
 
     try {
-      // ▼▼▼ 여기서 Map을 직접 만듭니다 (이게 toMap의 역할이었습니다) ▼▼▼
       final Map<String, dynamic> postData = {
         'title': _titleController.text,
         'content': _contentController.text,
@@ -60,7 +59,7 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
             : null,
       };
 
-      // 만들어진 Map(postData)을 서비스로 전달
+      
       await firebaseconnect.createClubPost(
         clubId: widget.clubId,
         postData: postData,
@@ -130,3 +129,4 @@ class _CreateClubPostScreenState extends State<CreateClubPostScreen> {
     );
   }
 }
+
