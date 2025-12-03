@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gnunity/models/post_model.dart';
 import 'package:gnunity/models/user_model.dart';
 import 'package:share_plus/share_plus.dart'; // share_plus 패키지 import
 
@@ -165,3 +166,4 @@ class _ClubPostDetailScreenState extends State<ClubPostDetailScreen> {
   }
 
 }
+
